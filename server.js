@@ -1,8 +1,31 @@
-const http = require("http");
-const app = require("./app");
+// server.js
+const cors = require('cors');
+const eventRoute = require('./route/EventRoute');
+const express = require("express");
+const mongoose = require('mongoose');
+const app = express();
 
-app.set('port', process.env.PORT || 3000);
+const uri = "mongodb+srv://Loichi:mdp123@cluster0.srdtv22.mongodb.net/?retryWrites=true&w=majority";
 
-const server = http.createServer(app);
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-server.listen(3000);
+app.use(cors());
+
+async function connect() {
+  try {
+    await mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    console.log("Connected to MongoDB");
+  } catch (error) {
+    console.error("Error connecting to MongoDB:", error);
+  }
+}
+
+connect();
+
+app.listen(3000, () => {
+  console.log("Server starter on port 3000");
+})
+
+app.use('/events', eventRoute);
