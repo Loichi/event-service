@@ -24,8 +24,10 @@ async function connect() {
 
 connect();
 
-app.listen(3000, () => {
-  console.log("Server starter on port 3000");
-})
+const server = app.listen(3000, () => {
+  console.log("Server started on port 3000");
+});
 
 app.use('/events', eventRoute);
+
+module.exports = server; 

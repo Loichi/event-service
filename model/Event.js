@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+const muv = require('mongoose-unique-validator');
+
+mongoose.plugin(muv);
 
 const EventSchema = mongoose.Schema({
     
