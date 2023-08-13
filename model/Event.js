@@ -9,7 +9,7 @@ const EventSchema = mongoose.Schema({
     date: {type: Date, required: true},
     location : {type:String , required: false},
     eventType : {type: String , required: false},
-    guestCount : {type: Number, required : false}
+    guestCount : {type: Number, required : false},
 });
 
 module.exports = mongoose.model('Event', EventSchema);
