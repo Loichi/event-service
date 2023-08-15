@@ -79,9 +79,8 @@ async function deleteAllEvents(req, res) {
 //Update Event By Id
 async function updateEventById(req, res) {
     try {
-    const { name, date, location, eventType, guestCount } = req.body;
-
-      const event = await Event.findByIdAndUpdate(req.params.id, { name, date, location, eventType, guestCount }, {new:true});
+    
+      const event = await Event.findByIdAndUpdate(req.params.id, req.body, {new:true});
 
       if(!event){
         return res.status(404).json({ message: 'Event not found.' });
