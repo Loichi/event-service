@@ -1,16 +1,28 @@
 const Event = require("../model/Event");
 const axios = require('axios');
 
-//Create
+//Crée un evenement et calcul le prix total de l'evenement pour le client
 async function createEvent(req, res) {
   try {
     const newEvent = await Event.create(req.body);
+
+    const response = await axios.get(`http://localhost:3010/menus/${newEvent.menu}`);
+
+    const menu = response.data; // Utilisez response.data pour accéder aux données renvoyées
+
+    if (!menu.menu_price) {
+      return res.status(404).json({ message: 'Menu not found, cannot calculate totalPrice' });
+    }
+
+    const totalPrice = menu.menu_price * newEvent.guestCount;
+    newEvent.totalPrice = totalPrice;
+
+    await newEvent.save();
+
     res.status(201).json(newEvent);
   } catch (err) {
     console.log(err);
-    res
-      .status(500)
-      .json({ error: "An error occured while creating the event" });
+    res.status(500).json({ error: 'An error occurred while creating the event' });
   }
 }
 
