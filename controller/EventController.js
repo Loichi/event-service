@@ -1,4 +1,5 @@
 const Event = require("../model/Event");
+const axios = require('axios');
 
 //Create
 async function createEvent(req, res) {
@@ -38,12 +39,16 @@ async function getEventById(req, res) {
   }
 }
 
-//Delete Event By Id
+//Supprime un event par son Id et le menu qui lui est lié
 async function deleteEventById(req, res) {
   try {
     const event = await Event.findByIdAndDelete(req.params.id);
     if (!event) {
       return res.status(404).json({ message: "Event not found." });
+    }
+    console.log("event menu : ",event.menu);
+    if(event.menu){
+      await axios.delete(`http://localhost:3010/menus/${event.menu}`);
     }
     res.json({ message: "Event deleted successfully." });
 } catch (err) {
